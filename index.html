@@ -50,7 +50,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .toggle{display:none}
 
 /* ---------- split ---------- */
-.split{display:grid;grid-template-columns:1fr 1fr;min-height:100vh}
+.split{display:grid;grid-template-columns:1fr 1fr;min-height:100vh;position:relative}
 .side{position:relative;padding:110px clamp(20px,4vw,56px) 56px;overflow:hidden;isolation:isolate}
 .side-inner{max-width:640px;margin:0 auto;position:relative}
 
@@ -176,6 +176,118 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .btn.primary{background:var(--s-ink);color:#fff}
 .btn.ghost{box-shadow:inset 0 0 0 1px var(--s-line)}
 
+/* =========================================================
+   THEME v2 — iridescent glass (Study) / glitch vaporwave (Play)
+   ========================================================= */
+@property --a{syntax:"<angle>";inherits:false;initial-value:0deg}
+@keyframes spin{to{--a:360deg}}
+:root{
+  --iri:conic-gradient(from var(--a),#ff9ad5,#b9a6ff,#8fd3ff,#9cf5d4,#fff1a6,#ffb88f,#ff9ad5);
+  --wine:#3d0b1f; --wine2:#5c1030; --plum:#1b0a26; --plum2:#2a0f38;
+  --p-magenta:#ff3d7f; --p-violet:#a13dff; --p-ink2:#c8a3c4; --p-line:rgba(255,61,127,.3);
+}
+
+/* ---------- STUDY: extra glassy + iridescent ---------- */
+.study{background:linear-gradient(160deg,#fbfbff 0%,#f3f0fb 40%,#eef6f3 100%)}
+.study::before,.study::after{display:none}
+.iri-blobs{position:absolute;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
+.iri-blobs i{position:absolute;border-radius:50%;filter:blur(60px);opacity:.95;mix-blend-mode:multiply;animation:drift 18s ease-in-out infinite alternate}
+.iri-blobs i:nth-child(1){width:440px;height:440px;background:#ffa8d6;top:-120px;left:-80px}
+.iri-blobs i:nth-child(2){width:400px;height:400px;background:#a3d6ff;top:120px;right:-120px;animation-duration:22s}
+.iri-blobs i:nth-child(3){width:380px;height:380px;background:#a6f2cf;bottom:-80px;left:10%;animation-duration:26s}
+.iri-blobs i:nth-child(4){width:320px;height:320px;background:#cfb2ff;bottom:20%;right:15%;animation-duration:20s}
+.iri-blobs i:nth-child(5){width:260px;height:260px;background:#ffd49e;top:35%;left:30%;animation-duration:24s}
+@keyframes drift{0%{transform:translate(0,0) scale(1)}50%{transform:translate(60px,-40px) scale(1.15)}100%{transform:translate(-40px,50px) scale(.95)}}
+
+.study h2{background:linear-gradient(100deg,#12352b 0%,#3b2a7a 30%,#1f6f8c 55%,#7a3b6b 80%,#12352b 100%);background-size:250% 100%;
+  -webkit-background-clip:text;background-clip:text;color:transparent;animation:sheen 9s linear infinite}
+@keyframes sheen{to{background-position:250% 0}}
+.study .eyebrow{background:linear-gradient(90deg,#c9834f,#b65fa8,#4f8fc9);-webkit-background-clip:text;background-clip:text;color:transparent}
+
+/* glass panels with spinning iridescent rim */
+.study .card,.study .bubble{background:linear-gradient(135deg,rgba(255,255,255,.55),rgba(255,255,255,.14));
+  backdrop-filter:blur(22px) saturate(1.6);-webkit-backdrop-filter:blur(22px) saturate(1.6);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.95),inset 0 -1px 0 rgba(255,255,255,.4),0 18px 40px -12px rgba(80,60,140,.22),0 4px 10px rgba(80,60,140,.06)}
+.study .card{overflow:hidden;isolation:isolate}
+.study .card::after,.study .bubble::after{content:"";position:absolute;inset:0;border-radius:inherit;padding:1.5px;pointer-events:none;
+  background:var(--iri);animation:spin 7s linear infinite;
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;opacity:.85}
+/* holographic sheen sweeping across */
+.study .card::before{content:"";position:absolute;inset:-40%;z-index:-1;pointer-events:none;opacity:.0;
+  background:linear-gradient(115deg,transparent 35%,rgba(255,154,213,.55) 42%,rgba(143,211,255,.55) 48%,rgba(156,245,212,.55) 54%,rgba(255,241,166,.5) 60%,transparent 67%);
+  transform:translateX(-60%);transition:transform .9s ease,opacity .4s}
+.study .card:hover::before{opacity:1;transform:translateX(60%)}
+.study .card.live:hover{transform:translateY(-4px) scale(1.01);box-shadow:inset 0 1px 0 #fff,0 26px 50px -14px rgba(120,80,200,.35),0 0 0 1px rgba(255,255,255,.8)}
+.study .card.live:hover::after{opacity:1;padding:2.5px;animation-duration:2.5s}
+.study .icon{background:var(--iri);animation:spin 7s linear infinite;color:#2b2150;box-shadow:inset 0 0 0 1px rgba(255,255,255,.8),0 8px 18px rgba(120,80,200,.25)}
+.study .card:not(.live) .icon{background:linear-gradient(140deg,#efe7ff,#ffe9f4);animation:none;color:#8a7aa8}
+.study .tag{background:rgba(255,255,255,.55);color:#4a3f7a;box-shadow:inset 0 0 0 1px rgba(160,140,220,.35)}
+.study .go{background:linear-gradient(135deg,#2b2150,#12352b);color:#fff}
+.study .status{background:rgba(255,255,255,.75);box-shadow:inset 0 0 0 1px rgba(255,255,255,.9)}
+.study .bubble{color:#4b4a6a}
+
+/* ---------- PLAY: glitchy vaporwave, plum + wine ---------- */
+.play{background:linear-gradient(180deg,var(--plum) 0%,var(--plum2) 35%,#2c0c26 65%,var(--wine) 100%)}
+.play::after{display:none}
+.play::before{z-index:3;background:repeating-linear-gradient(0deg,rgba(0,0,0,.28) 0 1px,transparent 1px 3px);mix-blend-mode:multiply}
+.vw-sun{position:absolute;z-index:-1;width:min(420px,70%);aspect-ratio:1;border-radius:50%;right:-110px;top:-30px;opacity:.5;
+  background:linear-gradient(180deg,#ff3d7f 0%,#b0144f 55%,#5c1030 100%);
+  -webkit-mask:repeating-linear-gradient(180deg,#000 0 14px,transparent 14px 20px);mask:repeating-linear-gradient(180deg,#000 0 14px,transparent 14px 20px);
+  filter:drop-shadow(0 0 40px rgba(255,61,127,.5))}
+.vw-grid{position:absolute;z-index:-1;left:-50%;right:-50%;bottom:0;height:45%;pointer-events:none;
+  background:
+    linear-gradient(180deg,var(--plum2) 0%,transparent 30%),
+    repeating-linear-gradient(90deg,rgba(255,61,127,.45) 0 2px,transparent 2px 70px),
+    repeating-linear-gradient(0deg,rgba(255,61,127,.45) 0 2px,transparent 2px 70px);
+  transform:perspective(320px) rotateX(62deg);transform-origin:bottom;animation:gridmove 3s linear infinite;
+  -webkit-mask:linear-gradient(180deg,transparent,#000 40%);mask:linear-gradient(180deg,transparent,#000 40%)}
+@keyframes gridmove{to{background-position:0 0,0 0,0 70px}}
+.vw-track{position:absolute;left:0;right:0;height:60px;z-index:4;pointer-events:none;top:-80px;
+  background:linear-gradient(180deg,transparent,rgba(255,255,255,.06) 40%,rgba(255,61,127,.08) 60%,transparent);
+  backdrop-filter:blur(1px) hue-rotate(40deg);-webkit-backdrop-filter:blur(1px) hue-rotate(40deg);animation:track 7s linear infinite}
+@keyframes track{0%{top:-80px}100%{top:110%}}
+.vw-noise{position:absolute;inset:0;z-index:2;pointer-events:none;opacity:.07;mix-blend-mode:screen;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  animation:noise .4s steps(3) infinite}
+@keyframes noise{0%{transform:translate(0,0)}33%{transform:translate(-8px,5px)}66%{transform:translate(6px,-7px)}}
+
+.play .eyebrow{color:#ff8fb8;text-shadow:1px 0 rgba(52,230,255,.6)}
+.play h2{position:relative;color:#ffe6f0;text-shadow:-3px 0 rgba(52,230,255,.6),3px 0 rgba(255,61,127,.8)}
+.play h2::before,.play h2::after{content:attr(data-text);position:absolute;inset:0;pointer-events:none}
+.play h2::before{color:#34e6ff;mix-blend-mode:screen;animation:slice1 3.2s steps(1) infinite}
+.play h2::after{color:#ff3d7f;mix-blend-mode:screen;animation:slice2 2.7s steps(1) infinite}
+@keyframes slice1{0%,86%,100%{clip-path:inset(0 0 100% 0);transform:none}88%{clip-path:inset(20% 0 55% 0);transform:translate(-6px,0)}91%{clip-path:inset(60% 0 10% 0);transform:translate(5px,0)}94%{clip-path:inset(40% 0 35% 0);transform:translate(-3px,0)}}
+@keyframes slice2{0%,80%,100%{clip-path:inset(0 0 100% 0);transform:none}82%{clip-path:inset(70% 0 5% 0);transform:translate(6px,0)}85%{clip-path:inset(10% 0 70% 0);transform:translate(-5px,0)}}
+
+.play .bubble{background:rgba(61,11,31,.55);box-shadow:inset 0 0 0 1px var(--p-line),4px 4px 0 rgba(161,61,255,.25);color:#e8c3d9;border-radius:4px}
+.play .card{border-radius:6px;background:linear-gradient(160deg,rgba(92,16,48,.45),rgba(27,10,38,.7));
+  box-shadow:inset 0 0 0 1px rgba(255,61,127,.22),4px 4px 0 rgba(161,61,255,.18)}
+.play .card.live:hover{transform:translate(-2px,-2px);background:linear-gradient(160deg,rgba(255,61,127,.22),rgba(92,16,48,.5));
+  box-shadow:inset 0 0 0 1px var(--p-magenta),6px 6px 0 rgba(161,61,255,.45),-3px 0 0 rgba(52,230,255,.55),0 0 30px rgba(255,61,127,.35)}
+.play .card.live:hover,.play .card.glitching{animation:cardglitch .35s steps(2) 1}
+@keyframes cardglitch{0%{clip-path:inset(0);transform:translate(0)}20%{clip-path:inset(12% 0 60% 0);transform:translate(-6px,0)}40%{clip-path:inset(55% 0 20% 0);transform:translate(6px,0)}60%{clip-path:inset(30% 0 40% 0);transform:translate(-3px,0);filter:hue-rotate(60deg)}80%{clip-path:inset(0);transform:translate(2px,0)}100%{clip-path:inset(0);transform:translate(-2px,-2px)}}
+.play .card.has-img .wp{filter:saturate(1.1) contrast(1.05)}
+.play .card.has-img::before{background:linear-gradient(180deg,rgba(27,10,38,0) 25%,rgba(45,10,32,.72) 58%,rgba(27,8,24,.97) 100%)}
+.play .card.has-img:not(.live) .wp{filter:saturate(.45) brightness(.7) sepia(.2) hue-rotate(-20deg)}
+.play .card.live.has-img:hover .wp{filter:saturate(1.2) drop-shadow(-4px 0 rgba(52,230,255,.4))}
+.play .icon{border-radius:6px;background:linear-gradient(140deg,#ff3d7f,#a13dff);box-shadow:3px 3px 0 rgba(52,230,255,.35)}
+.play .card:not(.live) .icon{background:rgba(255,61,127,.1);color:#d79bb8;box-shadow:none}
+.play .tag{border-radius:3px;background:rgba(255,61,127,.14);color:#ffa3c6;font-family:Silkscreen,monospace;font-weight:400;font-size:10.5px;letter-spacing:.02em}
+.play .card.has-img .tag{background:rgba(27,8,24,.7)}
+.play .go{border-radius:4px;background:var(--p-magenta);box-shadow:2px 2px 0 rgba(52,230,255,.5)}
+.play .status{border-radius:3px;background:rgba(20,6,18,.7)}
+.play .foot{color:#c8a3c4}
+
+/* small "Outdated" badge */
+.chips{display:flex;gap:6px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+.badge{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:3px 7px;border-radius:3px;
+  color:#e8c3d9;background:rgba(20,6,18,.75);box-shadow:inset 0 0 0 1px rgba(232,195,217,.35)}
+.study .badge{color:#6b5a8a;background:rgba(255,255,255,.7);border-radius:999px}
+
+.seam{background:linear-gradient(180deg,#ff9ad5,#8fd3ff 30%,#ff3d7f 70%,var(--wine));opacity:.9;width:3px;box-shadow:0 0 14px rgba(255,61,127,.5)}
+.brand h1 .hub{color:var(--p-magenta)}
+.share{background:rgba(255,61,127,.2)}
+
 /* ---------- mobile ---------- */
 @media (max-width:860px){
   .topbar{padding-top:12px}
@@ -220,6 +332,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 
 <main class="split">
   <section class="side study" aria-labelledby="h-study">
+    <div class="iri-blobs" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
     <div class="side-inner">
       <div class="hero">
         <div class="mascot" data-who="seraph" role="button" tabindex="0" aria-label="Talk to the Seraph Orca">
@@ -240,6 +353,10 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   <div class="seam" aria-hidden="true"></div>
 
   <section class="side play" aria-labelledby="h-play">
+    <div class="vw-sun" aria-hidden="true"></div>
+    <div class="vw-grid" aria-hidden="true"></div>
+    <div class="vw-noise" aria-hidden="true"></div>
+    <div class="vw-track" aria-hidden="true"></div>
     <div class="side-inner">
       <div class="hero">
         <div class="mascot" data-who="demon" role="button" tabindex="0" aria-label="Talk to the Demon Panda">
@@ -248,7 +365,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
         </div>
         <div>
           <div class="eyebrow">The fun half</div>
-          <h2 id="h-play">Play</h2>
+          <h2 id="h-play" data-text="Play">Play</h2>
           <div class="bubble" id="bubble-demon"></div>
         </div>
       </div>
@@ -280,6 +397,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
    url:    only needed when status is "live"
    icon:   one of the keys in ICONS below
    image:  optional wallpaper, e.g. "assets/my-art.webp" (16:9 works best)
+   badge:  optional small label, e.g. "Outdated" or "New"
    ========================================================= */
 const PROJECTS = [
   { side:"study", name:"Study Guides", status:"live", icon:"book",
@@ -294,12 +412,12 @@ const PROJECTS = [
   { side:"play", name:"Football Draft Game", status:"live", icon:"ball",
     url:"https://football-draft-game.onrender.com/", image:"assets/wp-football.webp",
     tags:["Multiplayer","Football","Draft"] },
-  { side:"play", name:"Motorsports Draft Game", status:"live", icon:"flag",
-    url:"https://driver-draft-game.onrender.com/", image:"assets/wp-motorsport.webp",
-    tags:["Multiplayer","Motorsport","Draft"] },
   { side:"play", name:"The Devil & The Cosmonaut", status:"live", icon:"cards",
     url:"https://the-devil-the-cosmonaut.onrender.com/index.html", image:"assets/wp-devil-cosmonaut.webp",
     tags:["Solo","Solitaire","Puzzles","Phone-friendly"] },
+  { side:"play", name:"Motorsports Draft Game", status:"live", icon:"flag", badge:"Outdated",
+    url:"https://driver-draft-game.onrender.com/", image:"assets/wp-motorsport.webp",
+    tags:["Multiplayer","Motorsport","Draft"] },
   { side:"play", name:"Motorsports History Generator", status:"dev", icon:"history", image:"assets/wp-history.webp",
     tags:["Solo","Motorsport","Simulation"] },
   { side:"play", name:"Esports Extraction Shooter Simulator", status:"dev", icon:"crosshair",
@@ -348,7 +466,7 @@ function card(p){
   el.innerHTML = (p.image ? `<img class="wp" src="${p.image}" alt="" loading="lazy">` : "") + `
     <div class="top">
       <div class="icon"><svg viewBox="0 0 24 24">${ICONS[p.icon]||ICONS.target}</svg></div>
-      <span class="status ${live ? "waking" : p.status}"><span class="dot"></span><span class="lbl">${live ? "Waking up…" : STATUS_LABEL[p.status]}</span></span>
+      <div class="chips">${p.badge ? `<span class="badge">${p.badge}</span>` : ""}<span class="status ${live ? "waking" : p.status}"><span class="dot"></span><span class="lbl">${live ? "Waking up…" : STATUS_LABEL[p.status]}</span></span></div>
     </div>
     <h3>${p.name}</h3>
     <div class="tags">${(p.tags||[]).map(t=>`<span class="tag">${t}</span>`).join("")}</div>
@@ -359,6 +477,15 @@ function card(p){
   const g = document.getElementById("grid-"+side);
   PROJECTS.filter(p=>p.side===side).forEach(p=>g.appendChild(card(p)));
 });
+
+/* ---- random glitch flicker on Play cards ---- */
+setInterval(()=>{
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const cards = document.querySelectorAll(".play .card");
+  const c = cards[Math.floor(Math.random()*cards.length)];
+  if (!c) return;
+  c.classList.add("glitching"); setTimeout(()=>c.classList.remove("glitching"), 380);
+}, 2600);
 
 /* ---- wake up the Render apps (once per server) ---- */
 function setStatus(origin, cls, text){
