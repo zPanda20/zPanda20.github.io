@@ -1,0 +1,421 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cut">
+<title>Projects by Panda Hub</title>
+<meta name="description" content="Study tools and games by Panda: study guides, deadlines, draft games, puzzles and more, all in one place.">
+<meta property="og:title" content="Projects by Panda Hub">
+<meta property="og:description" content="Study on one side, play on the other. Every live app in one place.">
+<meta property="og:image" content="https://zpanda20.github.io/og.jpg">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#14091f">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Silkscreen&family=Manrope:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* Study side: Seraph Orca */
+  --s-bg:#eef3ee; --s-bg2:#e4ece6; --s-ink:#12352b; --s-ink2:#4d6a60;
+  --s-emerald:#1f7a5c; --s-copper:#c9834f; --s-glass:rgba(255,255,255,.55); --s-line:rgba(18,53,43,.12);
+  /* Play side: Demon Panda */
+  --p-bg:#14091f; --p-bg2:#1d0d2c; --p-ink:#f6e9ff; --p-ink2:#b49cc8;
+  --p-magenta:#ff2e93; --p-violet:#9b3dff; --p-cyan:#34e6ff; --p-line:rgba(255,46,147,.28);
+  --live:#2bd17e; --dev:#ffb03b; --soon:#9aa3b5;
+  --radius:18px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{font-family:Manrope,system-ui,sans-serif;background:var(--p-bg);color:var(--s-ink);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+
+/* ---------- top bar ---------- */
+.topbar{position:fixed;inset:0 0 auto 0;z-index:20;display:flex;justify-content:center;pointer-events:none;padding:18px 16px 0}
+.brand{pointer-events:auto;display:flex;align-items:center;gap:12px;padding:8px 10px 8px 18px;border-radius:999px;
+  background:rgba(20,9,31,.78);
+  backdrop-filter:blur(14px) saturate(1.3);-webkit-backdrop-filter:blur(14px) saturate(1.3);
+  box-shadow:0 10px 30px rgba(0,0,0,.18),inset 0 0 0 1px rgba(255,255,255,.25)}
+.brand h1{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:18px;letter-spacing:-.01em;white-space:nowrap}
+.brand h1 .a{color:#9fd8c0} .brand h1 .b{color:#fff}
+.brand h1 .hub{font-family:Silkscreen,monospace;font-weight:400;font-size:13px;color:var(--p-magenta);margin-left:6px;letter-spacing:.04em}
+.share{display:flex;align-items:center;gap:6px;padding:7px 12px;border-radius:999px;font-size:13px;font-weight:700;color:var(--p-ink);
+  background:rgba(255,46,147,.18);box-shadow:inset 0 0 0 1px var(--p-line);transition:background .2s}
+.share:hover{background:rgba(255,46,147,.32)}
+.share svg{width:15px;height:15px}
+
+/* ---------- mobile toggle ---------- */
+.toggle{display:none}
+
+/* ---------- split ---------- */
+.split{display:grid;grid-template-columns:1fr 1fr;min-height:100vh}
+.side{position:relative;padding:110px clamp(20px,4vw,56px) 56px;overflow:hidden;isolation:isolate}
+.side-inner{max-width:640px;margin:0 auto;position:relative}
+
+/* study side */
+.study{background:radial-gradient(120% 80% at 0% 0%,#ffffff 0%,var(--s-bg) 45%,var(--s-bg2) 100%);color:var(--s-ink)}
+.study::before,.study::after{content:"";position:absolute;border-radius:50%;filter:blur(60px);z-index:-1;opacity:.55}
+.study::before{width:420px;height:420px;background:#9fd8c0;top:-120px;right:-80px}
+.study::after{width:360px;height:360px;background:#f0c9a6;bottom:-100px;left:-90px}
+
+/* play side */
+.play{background:radial-gradient(120% 80% at 100% 0%,#2a0f3e 0%,var(--p-bg2) 40%,var(--p-bg) 100%);color:var(--p-ink)}
+.play::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+  background:repeating-linear-gradient(0deg,rgba(255,255,255,.025) 0 1px,transparent 1px 3px)}
+.play::after{content:"";position:absolute;width:460px;height:460px;border-radius:50%;filter:blur(80px);z-index:-1;
+  background:radial-gradient(circle,rgba(155,61,255,.45),transparent 70%);bottom:-140px;right:-120px}
+
+/* ---------- side header w/ mascot ---------- */
+.hero{display:grid;grid-template-columns:auto 1fr;align-items:end;gap:18px;margin-bottom:28px}
+.mascot{width:150px;height:170px;position:relative;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.mascot img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;transition:opacity .35s, transform .35s}
+.mascot img.alt{opacity:0}
+.mascot:hover img.main{opacity:0} .mascot:hover img.alt{opacity:1}
+.study .mascot{animation:float 5s ease-in-out infinite}
+@keyframes float{50%{transform:translateY(-8px)}}
+.play .mascot:hover img.alt{animation:glitch .5s steps(2) 1}
+@keyframes glitch{0%{transform:translate(2px,-1px);filter:drop-shadow(-3px 0 var(--p-cyan)) drop-shadow(3px 0 var(--p-magenta))}50%{transform:translate(-2px,1px)}100%{transform:none;filter:none}}
+
+.eyebrow{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase}
+.study .eyebrow{color:var(--s-copper)}
+.play .eyebrow{font-family:Silkscreen,monospace;font-weight:400;letter-spacing:.08em;color:var(--p-cyan)}
+.side h2{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:clamp(44px,6vw,72px);line-height:.9;letter-spacing:-.03em;margin:4px 0 12px}
+.study h2{color:var(--s-ink)}
+.play h2{color:var(--p-ink);text-shadow:-2px 0 rgba(52,230,255,.55),2px 0 rgba(255,46,147,.6)}
+
+.bubble{position:relative;display:inline-block;max-width:100%;font-size:14.5px;line-height:1.45;padding:11px 15px;border-radius:14px;min-height:44px}
+.study .bubble{background:var(--s-glass);box-shadow:inset 0 0 0 1px rgba(255,255,255,.8),0 6px 18px rgba(18,53,43,.08);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);color:var(--s-ink2)}
+.play .bubble{background:rgba(255,255,255,.05);box-shadow:inset 0 0 0 1px var(--p-line);color:var(--p-ink2);font-style:italic}
+.bubble::before{content:"";position:absolute;left:-7px;bottom:14px;width:14px;height:14px;transform:rotate(45deg);background:inherit;box-shadow:inherit;clip-path:polygon(0 0,0 100%,100% 100%)}
+.bubble .hint{display:block;font-size:11px;font-style:normal;opacity:.6;margin-top:3px}
+
+/* ---------- cards ---------- */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+.card{position:relative;display:flex;flex-direction:column;gap:14px;padding:18px;border-radius:var(--radius);min-height:150px;transition:transform .25s ease, box-shadow .25s ease, background .25s}
+.card .top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.icon{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;flex:none}
+.icon svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.card h3{font-family:"Bricolage Grotesque",sans-serif;font-weight:600;font-size:19px;line-height:1.15;letter-spacing:-.01em}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto}
+.card.live .tags{padding-right:40px}
+.study .grid .card:first-child{grid-column:1/-1}
+.tag{font-size:11.5px;font-weight:600;padding:3px 9px;border-radius:999px}
+.status{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:4px 9px;border-radius:999px;white-space:nowrap}
+.status .dot{width:7px;height:7px;border-radius:50%;background:currentColor}
+.status.waking .dot{animation:pulse 1s ease-in-out infinite}
+@keyframes pulse{50%{opacity:.25}}
+.go{position:absolute;right:16px;bottom:16px;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;transition:transform .25s}
+.go svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.card.live:hover .go{transform:translateX(3px) rotate(-45deg)}
+.card:not(.live){cursor:default}
+.card:not(.live) .go{display:none}
+.card:not(.live) h3{opacity:.75}
+
+/* study cards: glass */
+.study .card{background:var(--s-glass);backdrop-filter:blur(14px) saturate(1.2);-webkit-backdrop-filter:blur(14px) saturate(1.2);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.9),0 1px 0 rgba(255,255,255,.9) inset,0 10px 30px rgba(18,53,43,.08)}
+.study .card.live:hover{transform:translateY(-3px);box-shadow:inset 0 0 0 1px rgba(255,255,255,.95),0 16px 40px rgba(31,122,92,.18),0 0 0 2px rgba(201,131,79,.35)}
+.study .icon{background:linear-gradient(140deg,#2a9a74,#17604a);color:#fff;box-shadow:0 6px 14px rgba(31,122,92,.3)}
+.study .card:not(.live) .icon{background:linear-gradient(140deg,#d8a77f,#b9733f)}
+.study .tag{background:rgba(31,122,92,.09);color:var(--s-emerald)}
+.study .go{background:var(--s-ink);color:#fff}
+.study .status{background:rgba(255,255,255,.7)}
+
+/* play cards: neon */
+.play .card{background:linear-gradient(160deg,rgba(255,255,255,.06),rgba(255,255,255,.02));box-shadow:inset 0 0 0 1px rgba(255,255,255,.08)}
+.play .card.live:hover{transform:translateY(-3px);background:linear-gradient(160deg,rgba(255,46,147,.14),rgba(155,61,255,.08));
+  box-shadow:inset 0 0 0 1px var(--p-magenta),0 0 24px rgba(255,46,147,.35),-3px 0 0 rgba(52,230,255,.5)}
+.play .icon{background:linear-gradient(140deg,var(--p-magenta),var(--p-violet));color:#fff;box-shadow:0 0 18px rgba(255,46,147,.4)}
+.play .card:not(.live) .icon{background:rgba(255,255,255,.08);color:var(--p-ink2);box-shadow:none}
+.play .tag{background:rgba(52,230,255,.1);color:var(--p-cyan)}
+.play .go{background:var(--p-magenta);color:#fff}
+.play .status{background:rgba(0,0,0,.35)}
+.play .card h3{color:var(--p-ink)}
+/* wallpaper cards */
+.card.has-img{overflow:hidden;min-height:190px;isolation:isolate}
+.card .wp{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;transition:transform .5s ease,filter .3s}
+.card.has-img::before{content:"";position:absolute;inset:0;z-index:-1;
+  background:linear-gradient(180deg,rgba(20,9,31,.15) 0%,rgba(20,9,31,.35) 45%,rgba(20,9,31,.92) 100%)}
+.card.has-img h3{text-shadow:0 2px 12px rgba(0,0,0,.6);margin-top:auto}
+.card.has-img .icon{visibility:hidden;width:0}
+.card.has-img .top{justify-content:flex-end}
+.card.has-img .tags{margin-top:0}
+.card.has-img::before{background:linear-gradient(180deg,rgba(20,9,31,0) 25%,rgba(20,9,31,.7) 58%,rgba(20,9,31,.96) 100%)}
+.card.has-img .tag{background:rgba(10,4,18,.6);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.card.has-img .status{background:rgba(10,4,18,.65);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.card.has-img.live:hover .wp{transform:scale(1.06)}
+.card.has-img:not(.live) .wp{filter:saturate(.55) brightness(.8)}
+.card.has-img:not(.live) h3{opacity:.92}
+
+.status.live{color:#16a362} .play .status.live{color:var(--live)}
+.status.waking{color:#c88a1c} .play .status.waking{color:var(--dev)}
+.status.dev{color:#c88a1c} .play .status.dev{color:var(--dev)}
+.status.soon{color:#6b778c} .play .status.soon{color:var(--soon)}
+.status.down{color:#c88a1c} .play .status.down{color:var(--dev)}
+
+.foot{margin-top:28px;font-size:12.5px;line-height:1.5}
+.study .foot{color:var(--s-ink2)} .play .foot{color:var(--p-ink2)}
+
+/* divider seam */
+.seam{position:absolute;top:0;bottom:0;left:50%;width:2px;transform:translateX(-1px);z-index:5;pointer-events:none;
+  background:linear-gradient(180deg,transparent,var(--s-copper) 20%,var(--p-magenta) 80%,transparent);opacity:.7}
+
+/* ---------- share dialog ---------- */
+.modal{position:fixed;inset:0;z-index:50;display:none;place-items:center;background:rgba(10,4,18,.6);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);padding:16px}
+.modal.open{display:grid}
+.sheet{background:#fff;color:var(--s-ink);border-radius:22px;padding:24px;width:min(340px,100%);text-align:center;box-shadow:0 30px 80px rgba(0,0,0,.4)}
+.sheet h4{font-family:"Bricolage Grotesque",sans-serif;font-size:22px;font-weight:800;margin-bottom:4px}
+.sheet p{font-size:13.5px;color:var(--s-ink2);margin-bottom:16px}
+#qr{display:grid;place-items:center;margin:0 auto 16px;padding:12px;background:#fff;border-radius:14px;box-shadow:inset 0 0 0 1px var(--s-line);width:fit-content}
+#qr img,#qr canvas{display:block;width:200px;height:200px}
+.url{font-size:13px;font-weight:700;padding:10px 12px;border-radius:12px;background:var(--s-bg);word-break:break-all;margin-bottom:12px}
+.row{display:flex;gap:8px}
+.btn{flex:1;padding:11px;border-radius:12px;font-weight:700;font-size:14px}
+.btn.primary{background:var(--s-ink);color:#fff}
+.btn.ghost{box-shadow:inset 0 0 0 1px var(--s-line)}
+
+/* ---------- mobile ---------- */
+@media (max-width:860px){
+  .topbar{padding-top:12px}
+  .brand{padding-left:14px}
+  .brand h1{font-size:15px}
+  .brand h1 .hub{font-size:11px}
+  .share span{display:none}
+  .toggle{display:flex;position:fixed;z-index:19;left:50%;transform:translateX(-50%);top:66px;padding:4px;border-radius:999px;
+    background:rgba(20,9,31,.75);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);box-shadow:0 8px 24px rgba(0,0,0,.25)}
+  .toggle button{padding:8px 22px;border-radius:999px;font-weight:700;font-size:14px;color:#cdb8df;transition:background .25s,color .25s}
+  .toggle button[aria-pressed="true"].t-study{background:#fff;color:var(--s-ink)}
+  .toggle button[aria-pressed="true"].t-play{background:var(--p-magenta);color:#fff}
+  .split{display:block}
+  .side{min-height:100vh;padding:126px 16px 40px}
+  body[data-view="study"] .play{display:none}
+  body[data-view="play"] .study{display:none}
+  .seam{display:none}
+  .hero{grid-template-columns:96px 1fr;gap:12px}
+  .mascot{width:96px;height:118px}
+  .grid{grid-template-columns:1fr}
+  .card{min-height:0}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body data-view="study">
+
+<header class="topbar">
+  <div class="brand">
+    <h1><span class="a">Projects by</span> <span class="b">Panda</span><span class="hub">HUB</span></h1>
+    <button class="share" id="shareBtn" aria-label="Share this hub">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h3v3h-3zM20 14v1M14 20h1M18 18h3v3"/></svg>
+      <span>Share</span>
+    </button>
+  </div>
+</header>
+
+<nav class="toggle" role="group" aria-label="Switch side">
+  <button class="t-study" aria-pressed="true" data-view="study">Study</button>
+  <button class="t-play" aria-pressed="false" data-view="play">Play</button>
+</nav>
+
+<main class="split">
+  <section class="side study" aria-labelledby="h-study">
+    <div class="side-inner">
+      <div class="hero">
+        <div class="mascot" data-who="seraph" role="button" tabindex="0" aria-label="Talk to the Seraph Orca">
+          <img class="main" src="assets/seraph-greeting.webp" alt="Seraph Orca waving">
+          <img class="alt" src="assets/seraph-presenting.webp" alt="" aria-hidden="true">
+        </div>
+        <div>
+          <div class="eyebrow">The productive half</div>
+          <h2 id="h-study">Study</h2>
+          <div class="bubble" id="bubble-seraph"></div>
+        </div>
+      </div>
+      <div class="grid" id="grid-study"></div>
+      <p class="foot">Free-hosted apps nap when nobody's using them. This page wakes them up as soon as you arrive, so give a sleepy one a few seconds.</p>
+    </div>
+  </section>
+
+  <div class="seam" aria-hidden="true"></div>
+
+  <section class="side play" aria-labelledby="h-play">
+    <div class="side-inner">
+      <div class="hero">
+        <div class="mascot" data-who="demon" role="button" tabindex="0" aria-label="Talk to the Demon Panda">
+          <img class="main" src="assets/demon-smug.webp" alt="Demon Panda looking smug">
+          <img class="alt" src="assets/demon-invite.webp" alt="" aria-hidden="true">
+        </div>
+        <div>
+          <div class="eyebrow">The fun half</div>
+          <h2 id="h-play">Play</h2>
+          <div class="bubble" id="bubble-demon"></div>
+        </div>
+      </div>
+      <div class="grid" id="grid-play"></div>
+      <p class="foot">More projects are on the way. If you find a bug, tell Luke.</p>
+    </div>
+  </section>
+</main>
+
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="share-title">
+  <div class="sheet">
+    <h4 id="share-title">Share the hub</h4>
+    <p>Scan it, or copy the link into the group chat.</p>
+    <div id="qr"></div>
+    <div class="url" id="hubUrl"></div>
+    <div class="row">
+      <button class="btn ghost" id="closeBtn">Close</button>
+      <button class="btn primary" id="copyBtn">Copy link</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+/* =========================================================
+   EDIT YOUR PROJECTS HERE
+   side:   "study" or "play"
+   status: "live" | "dev" (In development) | "soon" (Coming soon)
+   url:    only needed when status is "live"
+   icon:   one of the keys in ICONS below
+   image:  optional wallpaper, e.g. "assets/my-art.webp" (16:9 works best)
+   ========================================================= */
+const PROJECTS = [
+  { side:"study", name:"Study Guides", status:"live", icon:"book",
+    url:"https://fall-sports-business-studyguides.onrender.com/#/",
+    tags:["Flashcards","Quizzes","Phone-friendly"] },
+  { side:"study", name:"Deadlines", status:"live", icon:"calendar",
+    url:"https://fall-sports-business-studyguides.onrender.com/#/deadlines",
+    tags:["Countdowns","Due dates"] },
+  { side:"study", name:"Exam Prep", status:"soon", icon:"target",
+    tags:["Exam-style questions"] },
+
+  { side:"play", name:"Football Draft Game", status:"live", icon:"ball",
+    url:"https://football-draft-game.onrender.com/", image:"assets/wp-football.webp",
+    tags:["Multiplayer","Football","Draft"] },
+  { side:"play", name:"Motorsports Draft Game", status:"live", icon:"flag",
+    url:"https://driver-draft-game.onrender.com/", image:"assets/wp-motorsport.webp",
+    tags:["Multiplayer","Motorsport","Draft"] },
+  { side:"play", name:"The Devil & The Cosmonaut", status:"live", icon:"cards",
+    url:"https://the-devil-the-cosmonaut.onrender.com/index.html", image:"assets/wp-devil-cosmonaut.webp",
+    tags:["Solo","Solitaire","Puzzles","Phone-friendly"] },
+  { side:"play", name:"Motorsports History Generator", status:"dev", icon:"history", image:"assets/wp-history.webp",
+    tags:["Solo","Motorsport","Simulation"] },
+  { side:"play", name:"Esports Extraction Shooter Simulator", status:"dev", icon:"crosshair",
+    tags:["Solo","Esports","Simulation"] },
+  { side:"play", name:"One More Game", status:"dev", icon:"film", image:"assets/wp-onemoregame.webp",
+    tags:["Docuseries","Video"] },
+  { side:"play", name:"My Tennis Career", status:"soon", icon:"tennis",
+    tags:["Tennis","Career","Possibly multiplayer"] },
+];
+
+const LINES = {
+  seraph:[
+    "Hi there! Your study guides and deadlines are right here. Let's make today a good one.",
+    "A little every day beats a lot the night before. You've got this!",
+    "Check your deadlines first, then pick a topic. One step at a time.",
+    "Stuck on something? The guides have a quiz for every topic."
+  ],
+  demon:[
+    "Oh, finished studying already? Sure you did. Pick your poison.",
+    "Draft games are best with a full room. Bring friends you don't mind beating.",
+    "One more game. Then you'll study. Definitely.",
+    "The Cosmonaut's puzzles are hard. I'm just saying."
+  ]
+};
+
+const ICONS = {
+  book:'<path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5zM4 20.5A2.5 2.5 0 0 0 6.5 23H20v-5"/>',
+  calendar:'<rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4M12 14v3l2 1"/>',
+  target:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/>',
+  ball:'<circle cx="12" cy="12" r="9"/><path d="M12 7l4 3-1.5 4.5h-5L8 10zM12 7V3M16 10l4-1M14.5 14.5l2 4M9.5 14.5l-2 4M8 10l-4-1"/>',
+  flag:'<path d="M5 21V4M5 4h13l-2 4 2 4H5"/><path d="M9 4v8M13 4v8M5 8h13"/>',
+  cards:'<rect x="3" y="6" width="11" height="15" rx="2"/><path d="M8 3h11a2 2 0 0 1 2 2v13"/><path d="M8.5 11l-2 2.5 2 2.5 2-2.5z"/>',
+  history:'<path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5M12 7v5l3 2"/>',
+  crosshair:'<circle cx="12" cy="12" r="8"/><path d="M12 2v5M12 17v5M2 12h5M17 12h5"/><circle cx="12" cy="12" r="1.5"/>',
+  film:'<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 4v16M17 4v16M3 9h4M3 15h4M17 9h4M17 15h4M10.5 10v4l3-2z"/>',
+  tennis:'<circle cx="12" cy="12" r="9"/><path d="M5.6 5.6c3.5 3.5 3.5 9.3 0 12.8M18.4 5.6c-3.5 3.5-3.5 9.3 0 12.8"/>'
+};
+const STATUS_LABEL = { live:"Live", dev:"In development", soon:"Coming soon" };
+const ARROW = '<svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
+
+function card(p){
+  const live = p.status === "live";
+  const el = document.createElement(live ? "a" : "div");
+  el.className = "card" + (live ? " live" : "") + (p.image ? " has-img" : "");
+  if (live){ el.href = p.url; el.target = "_blank"; el.rel = "noopener"; el.dataset.origin = new URL(p.url).origin; }
+  el.innerHTML = (p.image ? `<img class="wp" src="${p.image}" alt="" loading="lazy">` : "") + `
+    <div class="top">
+      <div class="icon"><svg viewBox="0 0 24 24">${ICONS[p.icon]||ICONS.target}</svg></div>
+      <span class="status ${live ? "waking" : p.status}"><span class="dot"></span><span class="lbl">${live ? "Waking up…" : STATUS_LABEL[p.status]}</span></span>
+    </div>
+    <h3>${p.name}</h3>
+    <div class="tags">${(p.tags||[]).map(t=>`<span class="tag">${t}</span>`).join("")}</div>
+    <span class="go">${ARROW}</span>`;
+  return el;
+}
+["study","play"].forEach(side=>{
+  const g = document.getElementById("grid-"+side);
+  PROJECTS.filter(p=>p.side===side).forEach(p=>g.appendChild(card(p)));
+});
+
+/* ---- wake up the Render apps (once per server) ---- */
+function setStatus(origin, cls, text){
+  document.querySelectorAll(`.card[data-origin="${origin}"] .status`).forEach(s=>{
+    s.className = "status " + cls; s.querySelector(".lbl").textContent = text;
+  });
+}
+[...new Set(PROJECTS.filter(p=>p.status==="live").map(p=>new URL(p.url).origin))].forEach(origin=>{
+  const ctrl = new AbortController();
+  const timer = setTimeout(()=>ctrl.abort(), 90000);
+  fetch(origin + "/?wake=" + Date.now(), { mode:"no-cors", cache:"no-store", signal:ctrl.signal })
+    .then(()=> setStatus(origin, "live", "Live"))
+    .catch(()=> setStatus(origin, "down", "Might be napping"))
+    .finally(()=> clearTimeout(timer));
+});
+
+/* ---- mascots ---- */
+const idx = { seraph:0, demon:0 };
+function say(who){
+  const b = document.getElementById("bubble-"+who);
+  b.innerHTML = LINES[who][idx[who]] + '<span class="hint">tap me</span>';
+  idx[who] = (idx[who]+1) % LINES[who].length;
+}
+say("seraph"); say("demon");
+document.querySelectorAll(".mascot").forEach(m=>{
+  const go = ()=> say(m.dataset.who);
+  m.addEventListener("click", go);
+  m.addEventListener("keydown", e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); go(); } });
+});
+
+/* ---- mobile Study / Play toggle ---- */
+function setView(v){
+  document.body.dataset.view = v;
+  document.querySelectorAll(".toggle button").forEach(b=>b.setAttribute("aria-pressed", b.dataset.view===v));
+  try{ localStorage.setItem("hubView", v); }catch(e){}
+  window.scrollTo({top:0});
+}
+document.querySelectorAll(".toggle button").forEach(b=>b.addEventListener("click", ()=>setView(b.dataset.view)));
+try{ const v = localStorage.getItem("hubView"); if (v==="play"||v==="study") setView(v); }catch(e){}
+
+/* ---- share ---- */
+const modal = document.getElementById("modal");
+const hubUrl = location.href.split("#")[0].split("?")[0];
+let qrDone = false;
+document.getElementById("hubUrl").textContent = hubUrl.replace(/^https?:\/\//,"");
+document.getElementById("shareBtn").addEventListener("click", ()=>{
+  modal.classList.add("open");
+  if (!qrDone && window.QRCode){ new QRCode(document.getElementById("qr"), { text:hubUrl, width:400, height:400, colorDark:"#14091f", colorLight:"#ffffff" }); qrDone = true; }
+});
+document.getElementById("closeBtn").addEventListener("click", ()=>modal.classList.remove("open"));
+modal.addEventListener("click", e=>{ if(e.target===modal) modal.classList.remove("open"); });
+document.addEventListener("keydown", e=>{ if(e.key==="Escape") modal.classList.remove("open"); });
+document.getElementById("copyBtn").addEventListener("click", async e=>{
+  try{ await navigator.clipboard.writeText(hubUrl); e.target.textContent = "Copied!"; }
+  catch(_){ e.target.textContent = "Copy failed"; }
+  setTimeout(()=> e.target.textContent = "Copy link", 1800);
+});
+</script>
+</body>
+</html>
