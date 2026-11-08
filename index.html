@@ -349,7 +349,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
         </div>
       </div>
       <div class="grid" id="grid-study"></div>
-      <p class="foot">Free-hosted apps nap when nobody's using them. This page wakes them up as soon as you arrive, so give a sleepy one a few seconds.</p>
+      <p class="foot">Free-hosted apps nap when nobody's using them. If one loads slowly, give it up to a minute to wake up.</p>
     </div>
   </section>
 
@@ -469,7 +469,7 @@ function card(p){
   el.innerHTML = (p.image ? `<img class="wp" src="${p.image}" alt="" loading="lazy">` : "") + `
     <div class="top">
       <div class="icon"><svg viewBox="0 0 24 24">${ICONS[p.icon]||ICONS.target}</svg></div>
-      <div class="chips">${p.badge ? `<span class="badge">${p.badge}</span>` : ""}<span class="status ${live ? "waking" : p.status}"><span class="dot"></span><span class="lbl">${live ? "Waking up…" : STATUS_LABEL[p.status]}</span></span></div>
+      <div class="chips">${p.badge ? `<span class="badge">${p.badge}</span>` : ""}<span class="status ${p.status}"><span class="dot"></span><span class="lbl">${STATUS_LABEL[p.status]}</span></span></div>
     </div>
     <h3>${p.name}</h3>
     <div class="tags">${(p.tags||[]).map(t=>`<span class="tag">${t}</span>`).join("")}</div>
@@ -489,21 +489,6 @@ setInterval(()=>{
   if (!c) return;
   c.classList.add("glitching"); setTimeout(()=>c.classList.remove("glitching"), 380);
 }, 5000);
-
-/* ---- wake up the Render apps (once per server) ---- */
-function setStatus(origin, cls, text){
-  document.querySelectorAll(`.card[data-origin="${origin}"] .status`).forEach(s=>{
-    s.className = "status " + cls; s.querySelector(".lbl").textContent = text;
-  });
-}
-[...new Set(PROJECTS.filter(p=>p.status==="live").map(p=>new URL(p.url).origin))].forEach(origin=>{
-  const ctrl = new AbortController();
-  const timer = setTimeout(()=>ctrl.abort(), 90000);
-  fetch(origin + "/?wake=" + Date.now(), { mode:"no-cors", cache:"no-store", signal:ctrl.signal })
-    .then(()=> setStatus(origin, "live", "Live"))
-    .catch(()=> setStatus(origin, "down", "Might be napping"))
-    .finally(()=> clearTimeout(timer));
-});
 
 /* ---- mascots ---- */
 const idx = { seraph:0, demon:0 };
